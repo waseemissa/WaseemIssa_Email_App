@@ -23,8 +23,16 @@
     <body class="antialiased">
         <center>
             <div style="border:2px solid black; border-radius:10px; width:25%; margin-top:8%">
-            <h1>Sign In</h1>
-            {{ Form::open(['route' => ['login'],'id' => 'login_form', 'files' => true]) }}
+            <h1>Create Account</h1>
+            {{ Form::open(['route' => ['register'],'id' => 'register_form', 'files' => true]) }}
+                <div style="display:flex; flex-direction:column; width:75%">
+                {{Form::label('first_name', 'First Name', array('style' => 'text-align: left'))}}
+                {{ Form::text('first_name','', ['placeholder' => 'At least 3 characters' ,'id' => 'first_name' ,'style' =>'height:30px; border:1px solid black']) }}
+                </div>
+                <div style="display:flex; flex-direction:column; width:75%">
+                {{Form::label('last_name', 'Last Name', array('style' => 'text-align: left'))}}
+                {{ Form::text('last_name','', ['placeholder' => 'At least 3 characters' ,'id' => 'last_name' ,'style' =>'height:30px; border:1px solid black']) }}
+                </div>
                 <div style="display:flex; flex-direction:column; width:75%">
                 {{Form::label('email', 'Email-address', array('style' => 'text-align: left'))}}
                 {{ Form::email('email','', ['placeholder' => 'someone@example.com' ,'id' => 'email' ,'style' =>'height:30px; border:1px solid black']) }}
@@ -33,10 +41,14 @@
                 {{Form::label('password', 'Password', array('style' => 'text-align: left'))}}
                 {{ Form::password('password', ['placeholder' => 'At least 6 Characters' ,'id' => 'password' ,'style' =>'height:30px; border:1px solid black']) }}
                 </div>
-                <div style="display:flex; flex-direction:column; width:75%; padding-top:10px">
-                {{ Form::submit('Login', ['style' => 'height:30px; font-size:14pt']) }}
+                <div style="display:flex; flex-direction:column; width:75%">
+                {{Form::label('password_confirmation', 'Confirm Password', array('style' => 'text-align: left'))}}
+                {{ Form::password('password_confirmation', ['placeholder' => 'Must match password' ,'id' => 'password_confirmation' ,'style' =>'height:30px; border:1px solid black']) }}
                 </div>
-                <p>Don't have an account? <a style="color:blue;" href="/register">Register</a></p>
+                <div style="display:flex; flex-direction:column; width:75%; padding-top:10px">
+                {{ Form::submit('Sign Up', ['style' => 'height:30px; font-size:14pt']) }}
+                </div>
+                <p>Already have an Account? <a style="color:blue;" href="/">Login</a></p>
             {{ Form::close() }} 
             </div>
         </center>

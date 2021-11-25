@@ -23,20 +23,21 @@
     <body class="antialiased">
         <center>
             <div style="border:2px solid black; border-radius:10px; width:25%; margin-top:8%">
-            <h1>Sign In</h1>
-            {{ Form::open(['route' => ['login'],'id' => 'login_form', 'files' => true]) }}
+            <h1>Send An Email</h1>
+            <button hidden id="token" value="{{$token}}"></button>
+            {{ Form::open(['route' => ['register'],'id' => 'register_form', 'files' => true]) }}
                 <div style="display:flex; flex-direction:column; width:75%">
-                {{Form::label('email', 'Email-address', array('style' => 'text-align: left'))}}
-                {{ Form::email('email','', ['placeholder' => 'someone@example.com' ,'id' => 'email' ,'style' =>'height:30px; border:1px solid black']) }}
+                {{Form::label('receiver', 'Receiver', array('style' => 'text-align: left'))}}
+                {{ Form::select('receiver', array('L' => 'Large', 'S' => 'Small'), 'S') }}
                 </div>
                 <div style="display:flex; flex-direction:column; width:75%">
-                {{Form::label('password', 'Password', array('style' => 'text-align: left'))}}
-                {{ Form::password('password', ['placeholder' => 'At least 6 Characters' ,'id' => 'password' ,'style' =>'height:30px; border:1px solid black']) }}
+                {{Form::label('email_body', 'Message', array('style' => 'text-align: left'))}}
+                {{ Form::textarea('email_body','', ['placeholder' => 'Your message' ,'id' => 'email_body' ,'style' =>'height:30px; border:1px solid black']) }}
                 </div>
                 <div style="display:flex; flex-direction:column; width:75%; padding-top:10px">
-                {{ Form::submit('Login', ['style' => 'height:30px; font-size:14pt']) }}
+                {{ Form::submit('Send Email', ['style' => 'height:30px; font-size:14pt']) }}
                 </div>
-                <p>Don't have an account? <a style="color:blue;" href="/register">Register</a></p>
+                <a style="color:blue;" href="/">Logout</a>
             {{ Form::close() }} 
             </div>
         </center>
