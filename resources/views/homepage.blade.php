@@ -24,11 +24,16 @@
         <center>
             <div style="border:2px solid black; border-radius:10px; width:25%; margin-top:8%">
             <h1>Send An Email</h1>
-            <button hidden id="token" value="{{$token}}"></button>
-            {{ Form::open(['route' => ['register'],'id' => 'register_form', 'files' => true]) }}
+            <button hidden id="token" value={{$token}}>{{$token}}</button>
+            {{ Form::open(['id' => 'email_form', 'files' => true,]) }}
+                @csrf
                 <div style="display:flex; flex-direction:column; width:75%">
                 {{Form::label('receiver', 'Receiver', array('style' => 'text-align: left'))}}
-                {{ Form::select('receiver', array('L' => 'Large', 'S' => 'Small'), 'S') }}
+                <select id ="email" name="email">
+                    @foreach ( $emails as $value )
+                    <option value={{ $value['email'] }}>{{ $value['name'] }}</option>
+                    @endforeach 
+                </select>
                 </div>
                 <div style="display:flex; flex-direction:column; width:75%">
                 {{Form::label('email_body', 'Message', array('style' => 'text-align: left'))}}
@@ -37,9 +42,60 @@
                 <div style="display:flex; flex-direction:column; width:75%; padding-top:10px">
                 {{ Form::submit('Send Email', ['style' => 'height:30px; font-size:14pt']) }}
                 </div>
-                <a style="color:blue;" href="/">Logout</a>
+                <a style="color:blue;" href="logout">Logout</a>
             {{ Form::close() }} 
             </div>
         </center>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+
+var form = document.getElementById('email_form');
+form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    console.log("hello");
+    sendEmail();
+});
+
+function sendEmail() {
+    sendEmailAPI()
+    .then(response=>{
+        console.log(response);
+    })
+    .catch((error) => {
+    console.log(error.message);
+    });
+ }
+
+async function sendEmailAPI() {
+const authorization = $('#token').val();
+const email = $('#email').val();
+const message = $('#email_body').val();
+
+console.log(authorization);
+console.log(email);
+console.log(message);
+
+const response = await fetch(
+"http://127.0.0.1:8000/api/auth/send-email",
+{
+method: "POST",
+headers: { accepts: "application/json", Authorization: 'Bearer '+authorization },
+body: new URLSearchParams({
+  'email': email,
+  'email_body': message
+}),
+}
+);
+
+if (!response.ok) {
+const message = "ERROR OCCURED";
+throw new Error(message);
+}
+
+const send_response = await response.json();
+return send_response;
+}
+</script>
     </body>
+
 </html>

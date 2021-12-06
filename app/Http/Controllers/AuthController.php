@@ -9,6 +9,7 @@ use Validator;
 use JWTAuth;
 
 
+
 class AuthController extends Controller
 {
     /**
@@ -17,7 +18,7 @@ class AuthController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'logout',]]);
         $this->guard = "api";
     }
 
@@ -43,7 +44,7 @@ class AuthController extends Controller
         $session = $this->createNewToken($token);
         if ($session){
             if(auth($this->guard)->user()->is_admin == '1')
-                return view('homepage', ['token' => $token]);
+                return view('homepage', ['token' => $token, 'emails' => AuthController::getEmails()]);
             else
                 return view('login');
         }
@@ -87,9 +88,23 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function logout() {
-        auth($this->guard)->logout();
+        auth()->logout();
 
         return view('login');
+    }
+
+    public function getEmails(){
+
+
+        $emails = User::where('is_admin', '0')->get(['first_name', 'last_name', 'email']);
+
+        $result = array();
+        for($i = 0; $i < count($emails); $i++){
+            $result[$i]['name'] = $emails[$i]->first_name.' '.$emails[$i]->last_name;
+            $result[$i]['email'] = $emails[$i]->email;
+        }
+        return $result;
+        
     }
 
     /**
